@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Space {
+  id           String    @id @default(uuid())
+  name         String
+  type         SpaceType
+  capacity     Int
+  pricePerHour Float
+  availability Boolean
+  bookings     Booking[]
+}
+
+model Booking {
+  id        String        @id @default(uuid())
+  userName  String
+  userEmail String
+  space     Space         @relation(fields: [spaceId], references: [id])
+  spaceId   String
+  start     DateTime
+  end       DateTime
+  status    BookingStatus
+  createdAt DateTime      @default(now())
+}
+
+model User {
+  id    String   @id @default(uuid())
+  name  String
+  email String   @unique
+  role  UserRole
+}
+
+// Enums
+enum SpaceType {
+  PRIVATE_OFFICE
+  MEETING_ROOM
+  HOT_DESK
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+}
