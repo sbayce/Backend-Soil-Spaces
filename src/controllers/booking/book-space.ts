@@ -5,7 +5,8 @@ const bookSpace = async (req: Request, res: Response) => {
     const { prisma } = req.context
     const { spaceId } = req.params
     const userId = String(req.userId)
-    const { timeSlotId, date } = req.body
+    const { date } = req.body
+    const timeSlotId = Number(req.body.timeSlotId)
     const user = await prisma.user.findUnique({
         where: {
             id: userId
@@ -30,7 +31,7 @@ const bookSpace = async (req: Request, res: Response) => {
         res.status(404).json({ error: "Space not found." })
         return
     }
-    const timeSlot = await prisma.timeSlot.findUnique({ where: { id: Number(timeSlotId) } });
+    const timeSlot = await prisma.timeSlot.findUnique({ where: { id: timeSlotId } });
     if (!timeSlot) {
         res.status(404).json({ error: "Time slot does not exist." })
         return
