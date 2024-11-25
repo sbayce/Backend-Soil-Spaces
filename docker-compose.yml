@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15
+    restart: always
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: soilspaces
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  
+  backend:
+    build: .
+    container_name: soilspaces-backend
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/soilspaces
+      ACCESS_SECRET: access
+      ACCESS_EXPIRATION: 1h
+      REFRESH_SECRET: refresh
+      REFRESH_EXPIRATION: 1h
+      PORT: 4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    command: bash -c "npx prisma migrate dev --skip-seed && npm start"
+
+volumes:
+  db-data:
