@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { spaceRouter } from './routes/space';
 import { authRouter } from './routes/auth';
 import { bookingRouter } from './routes/booking';
+import { timeslotRouter } from './routes/timeslot';
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from './swagger';
 
@@ -46,6 +47,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/auth', authRouter)
 app.use('/space', spaceRouter)
 app.use('/booking', bookingRouter)
+app.use('/timeslot', timeslotRouter)
 
 app.get('/', (req, res) => {
     res.send("test")
