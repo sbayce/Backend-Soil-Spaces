@@ -30,7 +30,7 @@ const bookSpace = async (req: Request, res: Response) => {
         res.status(404).json({ error: "Space not found." })
         return
     }
-    const timeSlot = await prisma.timeSlot.findUnique({ where: { id: timeSlotId } });
+    const timeSlot = await prisma.timeSlot.findUnique({ where: { id: Number(timeSlotId) } });
     if (!timeSlot) {
         res.status(404).json({ error: "Time slot does not exist." })
         return
