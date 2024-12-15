@@ -12,7 +12,7 @@ const bookSpace = async (req: Request, res: Response) => {
             id: userId
         },
         select: {
-            name: true,
+            firstName: true,
             email: true
         }
     })
@@ -51,7 +51,7 @@ const bookSpace = async (req: Request, res: Response) => {
     const booking = await prisma.booking.create({
         data: {
             userId: userId,
-            userName: user.name,
+            userName: user.firstName,
             userEmail: user.email,
             date: dateObject,
             spaceId,

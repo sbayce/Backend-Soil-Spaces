@@ -45,12 +45,22 @@ model Booking {
 
 model User {
   id    String   @id @default(uuid())
-  name  String
+  firstName  String
+  lastName   String
+  occupation String?
   email String   @unique
   password String
   role  UserRole
   bookings Booking[]
+  interests Interest[]
 }
+
+model Interest {
+  id    Int   @id @default(autoincrement())
+  name  String @unique
+  users User[]
+}
+
 enum SpaceType {
   PRIVATE_OFFICE
   MEETING_ROOM

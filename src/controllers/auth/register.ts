@@ -4,22 +4,47 @@ import createToken from "../../utils/create-token";
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, role } = req.body;
-    const { prisma } = req.context;
+    const { firstName, lastName, occupation, email, password, confirmPassword, role, interests } = req.body;
+    const { prisma } = req.context
+
     const existingUser = await prisma.user.findUnique({
       where: { email },
-    });
+    })
+
     if (existingUser) {
       res.status(400).json({error: "User already exists."});
-      return;
+      return
     }
+    if(password !== confirmPassword) {
+      res.status(400).json({ error: "Passwords don't match." })
+      return
+    }
+
+    const validInterests = await prisma.interest.findMany({
+      where: {
+        id: {
+          in: interests,
+        },
+      },
+    })
+
+    if (validInterests.length !== interests.length) {
+      res.status(400).json({ error: "Some interests are invalid" })
+      return
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
-        name,
+        firstName,
+        lastName,
+        occupation: occupation || undefined,
         email,
         password: hashedPassword,
-        role
+        role,
+        interests: {
+          connect: interests.map((interestId: number) => ({ id: interestId }))
+        }
       },
     });
     const token = createToken(user.id, role);

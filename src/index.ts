@@ -8,6 +8,7 @@ import { spaceRouter } from './routes/space';
 import { authRouter } from './routes/auth';
 import { bookingRouter } from './routes/booking';
 import { timeslotRouter } from './routes/timeslot';
+import { interestRouter } from './routes/interest';
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from './swagger';
 
@@ -48,6 +49,7 @@ app.use('/auth', authRouter)
 app.use('/space', spaceRouter)
 app.use('/booking', bookingRouter)
 app.use('/timeslot', timeslotRouter)
+app.use('/interest', interestRouter)
 
 app.get('/', (req, res) => {
     res.send("test")

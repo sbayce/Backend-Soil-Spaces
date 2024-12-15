@@ -1,6 +1,8 @@
 import { Router } from "express";
 import register from "../controllers/auth/register";
 import login from "../controllers/auth/login";
+import { validateData } from "../middleware/validation";
+import { userRegisterSchema } from "../schemas/auth";
 
 /**
  * @swagger
@@ -65,7 +67,7 @@ export const authRouter = Router()
  *       500:
  *         description: Internal server error
  */
-authRouter.post('/register', register)
+authRouter.post('/register', validateData(userRegisterSchema), register)
 /**
  * @swagger
  * /auth/login:
